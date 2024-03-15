@@ -11,4 +11,19 @@
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   }
+
+  img {
+    max-width: 100%;
+    border-radius: 50%;
+  }
+
+  p {
+    margin: 10px 0;
+  }
+
+  .types,
+  .weaknesses {
+    margin-top: 10px;
+    font-weight: bold;
+  }
 }

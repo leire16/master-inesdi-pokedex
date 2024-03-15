@@ -27,6 +27,21 @@ export type PokemonType = {
   };
 };
 
+export const getPokemonTypeDamage = async (url: string): Promise<PokemonTypeDamage> => {
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+};
+
+export interface PokemonTypeDamage {
+  damage_relations: {
+    double_damage_from: { name: string, url: string }[];
+    double_damage_to: { name: string, url: string }[];
+    half_damage_from: { name: string, url: string }[];
+    half_damage_to: { name: string, url: string }[];
+  };
+}
+
 export type Pokemon = {
   id: number;
   name: string;
