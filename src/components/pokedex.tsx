@@ -6,9 +6,9 @@ import { useTextTransition } from "../hooks/use-text-transition";
 import { Button } from "./button";
 import { LedDisplay } from "./led-display";
 import { randomMode } from "../utils/random";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+/*import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { Pokemon } from "../models";
+import { Pokemon } from "../models";*/
 
 import "./pokedex.css";
 
