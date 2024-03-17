@@ -8,7 +8,6 @@ import { LedDisplay } from "./led-display";
 import { randomMode } from "../utils/random";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
-
 import React from 'react';
 
 import "./pokedex.css";
