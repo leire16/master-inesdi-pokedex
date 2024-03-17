@@ -145,23 +145,44 @@
 /* Nueva sección para tipos y debilidades */
 .screen.type-display {
   margin-top: 20px;
+  margin-right: 25px;
+  margin-left: 25px;
 }
 
 .types, .weaknesses {
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   margin-left: 10px;
   margin-right: 10px;
   font-size: 16px;
   color: #333;
 }
 
+.imagenes{
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+.pokemon-info {
+  position: relative;
+}
+
 .heart-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: -10px; /* Ajusta según sea necesario */
+  right: -200px; /* Ajusta según sea necesario */
   background: none;
   border: none;
   cursor: pointer;
   background-color: white;
+}
+
+.error-message {
+  background-color: black; /* Color de fondo del mensaje de error */
+  color: yellow; /* Color del texto del mensaje de error */
+  padding: 10px; /* Espacio alrededor del mensaje de error */
+  margin-top: 10px; /* Margen superior para separar el mensaje de error de otros elementos */
+  border: 1px solid black; /* Borde del mensaje de error */
+  border-radius: 5px; /* Borde redondeado del mensaje de error */
 }

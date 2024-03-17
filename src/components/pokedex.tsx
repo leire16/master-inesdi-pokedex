@@ -1,14 +1,15 @@
 import c from "classnames";
 import { useState } from "react";
 import { useTheme } from "../contexts/use-theme";
-import { usePokemon, usePokemonList,usePokemonWeaknesses } from "../hooks";
+import { usePokemon, usePokemonList,usePokemonWeaknesses,typeImageMap,useFavorite } from "../hooks";
 import { useTextTransition } from "../hooks/use-text-transition";
 import { Button } from "./button";
 import { LedDisplay } from "./led-display";
 import { randomMode } from "../utils/random";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { Pokemon } from "../models";
+
+import React from 'react';
 
 import "./pokedex.css";
 
@@ -19,21 +20,10 @@ export function Pokedex() {
   const [i, setI] = useState(0);
   const { pokemon: selectedPokemon } = usePokemon(pokemonList[i]);
   const { pokemon: nextPokemon } = usePokemon(pokemonList[i + 1]);
-  /*const [isFavorite, setIsFavorite] = useState(false);*/
+  
+  const { favoritePokemon, toggleFavorite, errorMessage } = useFavorite(selectedPokemon || null); // Importa errorMessage
 
   const weaknesses = usePokemonWeaknesses(selectedPokemon);
-
-  /*const toggleFavorite = () => {
-    console.log("Pokemon seleccionado: "+selectedPokemon?.name)
-    if (selectedPokemon) { // Verificar que selectedPokemon no sea undefined
-      setIsFavorite(!isFavorite);
-      if (!isFavorite) {
-        addToTeam(selectedPokemon);
-      } else {
-        removeFromTeam(selectedPokemon);
-      }
-    }
-  };*/
 
   const prev = () => {
     resetTransition();
@@ -51,23 +41,18 @@ export function Pokedex() {
     setI((i) => i + 1);
   };
 
-  /*const addToTeam = (pokemon: Pokemon) => {
-    // Aquí puedes implementar la lógica para agregar el Pokémon al equipo
-    console.log("Añadir a equipo:", pokemon.name);
-  };
-
-  const removeFromTeam = (pokemon: Pokemon) => {
-    // Aquí puedes implementar la lógica para quitar el Pokémon del equipo
-    console.log("Eliminar de equipo:", pokemon.name);
-  };*/
+  // Verificar si el Pokémon actual es favorito
+  const isCurrentPokemonFavorite = selectedPokemon ? favoritePokemon.some(p => p.name === selectedPokemon.name) : false;
 
   return selectedPokemon ? (
     <div className={c("pokedex", `pokedex-${theme}`)}>
       <div className="panel left-panel">
-        {/* Botón de corazón 
-        <button className="heart-button" onClick={toggleFavorite}>
-          <FontAwesomeIcon icon={faHeart} color={isFavorite ? 'red' : 'black'} size="3x" />
-        </button>*/}
+      <div className="pokemon-info">
+          {/* Botón de corazón */}
+          <button className="heart-button" onClick={() => toggleFavorite(selectedPokemon)}>
+            <FontAwesomeIcon icon={faHeart} color={isCurrentPokemonFavorite ? 'red' : 'black'} size="3x" />
+          </button>
+        </div>
 
         <div className="screen main-screen">
           {selectedPokemon && (
@@ -96,18 +81,39 @@ export function Pokedex() {
           </div>
         </div>
         <div className="screen type-display">
-          <div className={c("types", "obfuscated",
+          <div className={c( "obfuscated",
               ready && "ready",
               ready && `ready--${randomMode()}`)}>
-            <strong>Types:</strong>{" "}
-            {selectedPokemon?.types.map((type) => type.type.name).join(", ")}
+            <div className="types"><strong>Types:</strong></div>
+            {selectedPokemon?.types.map((type) => (
+              <React.Fragment key={type.type.name}>       
+                <img className="imagenes"
+                  src={typeImageMap[type.type.name]}
+                  alt={type.type.name}
+                />
+                </React.Fragment>
+            ))}
           </div>
-          <div className={c("weaknesses", "obfuscated",
+          <div className={c("obfuscated",
               ready && "ready",
               ready && `ready--${randomMode()}`)}>
-            <strong>Weaknesses:</strong> {weaknesses.join(', ')}
+            <div className="weaknesses"><strong>Weaknesses:</strong></div>
+            {weaknesses.map((weakness) => (
+              <React.Fragment key={weakness}>
+                <img className="imagenes"
+                  src={typeImageMap[weakness]}
+                  alt={weakness}
+                />
+              </React.Fragment>
+            ))}
           </div>
         </div>
+        {/* Renderizar el mensaje de error aquí */}
+        {errorMessage && (
+          <div className="error-message">
+            {errorMessage}
+          </div>
+        )}
       </div>
       <div className="panel right-panel">
         <div className="controls leds">
