@@ -47,7 +47,7 @@ export const usePokemonWeaknesses = (pokemon: Pokemon | undefined) => {
 
   useEffect(() => {
     const fetchWeaknesses = async () => {
-      if (!pokemon) return; // Si pokemon es undefined, no hagas nada
+      if (!pokemon) return; // Si pokemon es undefined, no hago nada
       const weaknessesResult = await PokemonDetails({ pokemon });
       setWeaknesses(weaknessesResult);
     };

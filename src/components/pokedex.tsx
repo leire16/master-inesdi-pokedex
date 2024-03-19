@@ -20,7 +20,7 @@ export function Pokedex() {
   const { pokemon: selectedPokemon } = usePokemon(pokemonList[i]);
   const { pokemon: nextPokemon } = usePokemon(pokemonList[i + 1]);
   
-  const { favoritePokemon, toggleFavorite, errorMessage } = useFavorite(selectedPokemon || null); // Importa errorMessage
+  const { favoritePokemon, toggleFavorite, errorMessage } = useFavorite(selectedPokemon || null);
 
   const weaknesses = usePokemonWeaknesses(selectedPokemon);
 
@@ -46,8 +46,23 @@ export function Pokedex() {
   return selectedPokemon ? (
     <div className={c("pokedex", `pokedex-${theme}`)}>
       <div className="panel left-panel">
+        <h2 className="favorite-title">Pokemon Team</h2>
+        <div className="favorite-pokemon-container">
+          {favoritePokemon.map((pokemon, index) => (
+            <div key={pokemon.name} className="favorite-pokemon-wrapper">
+              <img
+                src={pokemon.imageSrc}
+                alt={pokemon.name}
+                className="favorite-pokemon-image"
+              />
+              {(index + 1) % 2 === 0 && <br />} {}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="panel center-panel">
       <div className="pokemon-info">
-          {/* Botón de corazón */}
           <button className="heart-button" onClick={() => toggleFavorite(selectedPokemon)}>
             <FontAwesomeIcon icon={faHeart} color={isCurrentPokemonFavorite ? 'red' : 'black'} size="3x" />
           </button>
@@ -107,7 +122,6 @@ export function Pokedex() {
             ))}
           </div>
         </div>
-        {/* Renderizar el mensaje de error aquí */}
         {errorMessage && (
           <div className="error-message">
             {errorMessage}

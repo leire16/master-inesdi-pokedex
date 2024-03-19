@@ -8,6 +8,7 @@ export interface FavoriteProps {
 export interface FavoritePokemon {
   name: string;
   isFavorite: boolean;
+  imageSrc: string;
 }
 
 export const useFavorite = (selectedPokemon: Pokemon | null) => { // Recibe selectedPokemon como argumento
@@ -23,24 +24,23 @@ export const useFavorite = (selectedPokemon: Pokemon | null) => { // Recibe sele
       const updatedFavoritePokemon = [...favoritePokemon];
       updatedFavoritePokemon.splice(pokemonIndex, 1);
       setFavoritePokemon(updatedFavoritePokemon);
-      console.log(`El Pokémon ${selectedPokemon.name} ha sido eliminado de favoritos.`);
     } else {
       // Si el Pokémon no está en favoritos, lo añadimos
       if (favoritePokemon.length < 6) {
-        setFavoritePokemon([...favoritePokemon, { name: selectedPokemon.name, isFavorite: true }]);
-        console.log(`El Pokémon ${selectedPokemon.name} ha sido añadido a favoritos.`);
+        setFavoritePokemon([...favoritePokemon, { 
+          name: selectedPokemon.name, 
+          isFavorite: true,
+          imageSrc: selectedPokemon.sprites.front_default 
+        }]);
       } else {
         // Si ya hay 6 Pokémon favoritos, mostramos un mensaje de error durante 5 segundos
-        setErrorMessage("No se pueden agregar más de 6 Pokémons a favoritos.");
-        console.log("No se pueden agregar más de 6 Pokémons a favoritos.");
+        setErrorMessage("No more than 6 Pokémon can be added to the team.");
       }
     }
   };
 
   useEffect(() => {
-    console.log("Lista de Pokémon favoritos:", favoritePokemon.map(p => p.name));
-
-    // Limpiar el mensaje de error después de 5 segundos
+    // Limpiar el mensaje de error después de 3 segundos
     if (errorMessage) {
       const timer = setTimeout(() => {
         setErrorMessage("");
@@ -51,7 +51,7 @@ export const useFavorite = (selectedPokemon: Pokemon | null) => { // Recibe sele
         setErrorMessage("");
       };
     }
-  }, [favoritePokemon, errorMessage, selectedPokemon]); // Agrega selectedPokemon aquí
+  }, [favoritePokemon, errorMessage, selectedPokemon]);
 
   return { favoritePokemon, toggleFavorite, errorMessage };
 };
