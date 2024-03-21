@@ -84,7 +84,7 @@ export function Pokedex() {
             <FontAwesomeIcon
               icon={faHeart}
               color={isCurrentPokemonFavorite ? "red" : "black"}
-              size="3x"
+              size="2x"
             />
           </button>
         </div>
