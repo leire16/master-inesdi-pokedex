@@ -27,13 +27,19 @@ export type PokemonType = {
   };
 };
 
-export const getPokemonTypeDamage = async (url: string): Promise<PokemonTypeDamage> => {
+const pokemonTypeDamageCache = new Map<string, PokemonTypeDamage>();
+
+export const fetchPokemonTypeDamage = async (url: string): Promise<PokemonTypeDamage> => {
+  if (pokemonTypeDamageCache.has(url)) {
+    return pokemonTypeDamageCache.get(url)!;
+  }
   const response = await fetch(url);
-  const data = await response.json();
-  return data;
+  const pokemonTypeDamage = await response.json();
+  pokemonTypeDamageCache.set(url, pokemonTypeDamage);
+  return pokemonTypeDamage;
 };
 
-export interface PokemonTypeDamage {
+export type PokemonTypeDamage = {
   damage_relations: {
     double_damage_from: { name: string, url: string }[];
     double_damage_to: { name: string, url: string }[];
@@ -41,7 +47,7 @@ export interface PokemonTypeDamage {
     half_damage_to: { name: string, url: string }[];
     no_damage_from:{ name: string, url: string }[];
   };
-}
+};
 
 export type Pokemon = {
   id: number;

@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
-import { Pokemon } from "../models";
-import { getPokemonTypeDamage } from '../models';
+import { Pokemon, fetchPokemonTypeDamage } from "../models";
 
 //IMAGENES
-import grass from '../assets/2/grass.png';
+import bug from '../assets/2/bug.png';
+import electric from '../assets/2/electric.png';
+import fairy from '../assets/2/fairy.png';
+import fighting from '../assets/2/fighting.png';
+import fire from '../assets/2/fire.png';
 import flying from '../assets/2/flying.png';
+import grass from '../assets/2/grass.png';
+import ground from '../assets/2/ground.png';
+import ice from '../assets/2/ice.png';
+import normal from '../assets/2/normal.png';
 import poison from '../assets/2/poison.png';
 import psychic from '../assets/2/psychic.png';
-import fire from '../assets/2/fire.png';
-import ice from '../assets/2/ice.png';
-import ground from '../assets/2/ground.png';
 import rock from '../assets/2/rock.png';
-import water from '../assets/2/water.png';
-import electric from '../assets/2/electric.png';
-import bug from '../assets/2/bug.png';
-import normal from '../assets/2/normal.png';
-import fighting from '../assets/2/fighting.png';
 import steel from '../assets/2/steel.png';
-import fairy from '../assets/2/fairy.png';
+import water from '../assets/2/water.png';
 
 // Define el tipo para el mapeo de imágenes
 interface TypeImageMap {
@@ -39,7 +38,7 @@ export const typeImageMap: TypeImageMap = {
   normal: normal,
   fighting: fighting,
   steel: steel,
-  fairy: fairy
+  fairy: fairy,
 };
 
 export const usePokemonWeaknesses = (pokemon: Pokemon | undefined) => {
@@ -48,7 +47,7 @@ export const usePokemonWeaknesses = (pokemon: Pokemon | undefined) => {
   useEffect(() => {
     const fetchWeaknesses = async () => {
       if (!pokemon) return; // Si pokemon es undefined, no hago nada
-      const weaknessesResult = await PokemonDetails({ pokemon });
+      const weaknessesResult = await resolvePokemonWeaknesses({ pokemon });
       setWeaknesses(weaknessesResult);
     };
 
@@ -58,7 +57,7 @@ export const usePokemonWeaknesses = (pokemon: Pokemon | undefined) => {
   return weaknesses;
 };
 
-const PokemonDetails = async ({ pokemon }: { pokemon: Pokemon }) => {
+const resolvePokemonWeaknesses = async ({ pokemon }: { pokemon: Pokemon }) => {
   const weaknesses: Set<string> = new Set();
   const doubleDamageFrom: { name: string }[] = [];
   const halfDamageFrom: { name: string }[] = [];
@@ -66,7 +65,7 @@ const PokemonDetails = async ({ pokemon }: { pokemon: Pokemon }) => {
 
   // Obtener las debilidades, resistencias y ningún daño de ambos tipos
   for (const type of pokemon.types) {
-      const pokemonTypeDamage = await getPokemonTypeDamage(type.type.url);
+      const pokemonTypeDamage = await fetchPokemonTypeDamage(type.type.url);
       doubleDamageFrom.push(...pokemonTypeDamage.damage_relations.double_damage_from);
       halfDamageFrom.push(...pokemonTypeDamage.damage_relations.half_damage_from);
       noDamageFrom.push(...pokemonTypeDamage.damage_relations.no_damage_from);
