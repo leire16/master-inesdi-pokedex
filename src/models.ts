@@ -4,6 +4,23 @@ export type PokemonUri = {
   url: string;
 };
 
+export type KnownPokemonType =
+  | "bug"
+  | "electric"
+  | "fairy"
+  | "fighting"
+  | "fire"
+  | "flying"
+  | "grass"
+  | "ground"
+  | "ice"
+  | "normal"
+  | "poison"
+  | "psychic"
+  | "rock"
+  | "steel"
+  | "water";
+
 export type PokemonAbility = {
   ability: {
     name: string;
@@ -29,7 +46,9 @@ export type PokemonType = {
 
 const pokemonTypeDamageCache = new Map<string, PokemonTypeDamage>();
 
-export const fetchPokemonTypeDamage = async (url: string): Promise<PokemonTypeDamage> => {
+export const fetchPokemonTypeDamage = async (
+  url: string
+): Promise<PokemonTypeDamage> => {
   if (pokemonTypeDamageCache.has(url)) {
     return pokemonTypeDamageCache.get(url)!;
   }
@@ -41,11 +60,11 @@ export const fetchPokemonTypeDamage = async (url: string): Promise<PokemonTypeDa
 
 export type PokemonTypeDamage = {
   damage_relations: {
-    double_damage_from: { name: string, url: string }[];
-    double_damage_to: { name: string, url: string }[];
-    half_damage_from: { name: string, url: string }[];
-    half_damage_to: { name: string, url: string }[];
-    no_damage_from:{ name: string, url: string }[];
+    double_damage_from: { name: string; url: string }[];
+    double_damage_to: { name: string; url: string }[];
+    half_damage_from: { name: string; url: string }[];
+    half_damage_to: { name: string; url: string }[];
+    no_damage_from: { name: string; url: string }[];
   };
 };
 

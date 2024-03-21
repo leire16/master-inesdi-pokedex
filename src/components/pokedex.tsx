@@ -5,16 +5,17 @@ import {
   usePokemon,
   usePokemonList,
   usePokemonWeaknesses,
-  typeImageMap,
   useFavorite,
 } from "../hooks";
 import { useTextTransition } from "../hooks/use-text-transition";
 import { Button } from "./button";
 import { LedDisplay } from "./led-display";
 import { randomMode } from "../utils/random";
+import { typeImageMap } from "../assets";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import type { KnownPokemonType } from "models";
 
 import "./pokedex.css";
 
@@ -125,12 +126,12 @@ export function Pokedex() {
             <div className="types">
               <strong>Types:</strong>
             </div>
-            {selectedPokemon?.types.map((type) => (
-              <React.Fragment key={type.type.name}>
+            {selectedPokemon?.types.map((pokemonType) => (
+              <React.Fragment key={pokemonType.type.name}>
                 <img
                   className="imagenes"
-                  src={typeImageMap[type.type.name]}
-                  alt={type.type.name}
+                  src={typeImageMap[pokemonType.type.name as KnownPokemonType]}
+                  alt={pokemonType.type.name}
                 />
               </React.Fragment>
             ))}
