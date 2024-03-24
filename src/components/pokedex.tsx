@@ -1,14 +1,21 @@
 import c from "classnames";
 import { useState } from "react";
 import { useTheme } from "../contexts/use-theme";
-import { usePokemon, usePokemonList,usePokemonWeaknesses,typeImageMap,useFavorite } from "../hooks";
+import {
+  usePokemon,
+  usePokemonList,
+  usePokemonWeaknesses,
+  useFavorite,
+} from "../hooks";
 import { useTextTransition } from "../hooks/use-text-transition";
 import { Button } from "./button";
 import { LedDisplay } from "./led-display";
 import { randomMode } from "../utils/random";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
+import { typeImageMap } from "../assets";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
+import type { KnownPokemonType } from "models";
 
 import "./pokedex.css";
 
@@ -19,8 +26,10 @@ export function Pokedex() {
   const [i, setI] = useState(0);
   const { pokemon: selectedPokemon } = usePokemon(pokemonList[i]);
   const { pokemon: nextPokemon } = usePokemon(pokemonList[i + 1]);
-  
-  const { favoritePokemon, toggleFavorite, errorMessage } = useFavorite(selectedPokemon || null);
+
+  const { favoritePokemon, toggleFavorite, errorMessage } = useFavorite(
+    selectedPokemon || null
+  );
 
   const weaknesses = usePokemonWeaknesses(selectedPokemon);
 
@@ -41,30 +50,42 @@ export function Pokedex() {
   };
 
   // Verificar si el Pokémon actual es favorito
-  const isCurrentPokemonFavorite = selectedPokemon ? favoritePokemon.some(p => p.name === selectedPokemon.name) : false;
+  const isCurrentPokemonFavorite = selectedPokemon
+    ? favoritePokemon.some((p) => p.name === selectedPokemon.name)
+    : false;
 
   return selectedPokemon ? (
     <div className={c("pokedex", `pokedex-${theme}`)}>
       <div className="panel left-panel">
         <h2 className="favorite-title">Pokemon Team</h2>
         <div className="favorite-pokemon-container">
-          {favoritePokemon.map((pokemon, index) => (
-            <div key={pokemon.name} className="favorite-pokemon-wrapper">
-              <img
-                src={pokemon.imageSrc}
-                alt={pokemon.name}
-                className="favorite-pokemon-image"
-              />
-              {(index + 1) % 2 === 0 && <br />} {}
-            </div>
-          ))}
+          {Array(6)
+            .fill(null)
+            .map((_, index) => (
+              <div key={index} className="favorite-pokemon-wrapper">
+                {favoritePokemon[index] && (
+                  <img
+                    src={favoritePokemon[index].imageSrc}
+                    alt={favoritePokemon[index].name}
+                    className="favorite-pokemon-image"
+                  />
+                )}
+              </div>
+            ))}
         </div>
       </div>
 
       <div className="panel center-panel">
-      <div className="pokemon-info">
-          <button className="heart-button" onClick={() => toggleFavorite(selectedPokemon)}>
-            <FontAwesomeIcon icon={faHeart} color={isCurrentPokemonFavorite ? 'red' : 'black'} size="3x" />
+        <div className="pokemon-info">
+          <button
+            className="heart-button"
+            onClick={() => toggleFavorite(selectedPokemon)}
+          >
+            <FontAwesomeIcon
+              icon={faHeart}
+              color={isCurrentPokemonFavorite ? "red" : "black"}
+              size="2x"
+            />
           </button>
         </div>
 
@@ -95,26 +116,40 @@ export function Pokedex() {
           </div>
         </div>
         <div className="screen type-display">
-          <div className={c( "obfuscated",
+          <div
+            className={c(
+              "obfuscated",
               ready && "ready",
-              ready && `ready--${randomMode()}`)}>
-            <div className="types"><strong>Types:</strong></div>
-            {selectedPokemon?.types.map((type) => (
-              <React.Fragment key={type.type.name}>       
-                <img className="imagenes"
-                  src={typeImageMap[type.type.name]}
-                  alt={type.type.name}
+              ready && `ready--${randomMode()}`
+            )}
+          >
+            <div className="types">
+              <strong>Types:</strong>
+            </div>
+            {selectedPokemon?.types.map((pokemonType) => (
+              <React.Fragment key={pokemonType.type.name}>
+                <img
+                  className="imagenes"
+                  src={typeImageMap[pokemonType.type.name as KnownPokemonType]}
+                  alt={pokemonType.type.name}
                 />
-                </React.Fragment>
+              </React.Fragment>
             ))}
           </div>
-          <div className={c("obfuscated",
+          <div
+            className={c(
+              "obfuscated",
               ready && "ready",
-              ready && `ready--${randomMode()}`)}>
-            <div className="weaknesses"><strong>Weaknesses:</strong></div>
+              ready && `ready--${randomMode()}`
+            )}
+          >
+            <div className="weaknesses">
+              <strong>Weaknesses:</strong>
+            </div>
             {weaknesses.map((weakness) => (
               <React.Fragment key={weakness}>
-                <img className="imagenes"
+                <img
+                  className="imagenes"
                   src={typeImageMap[weakness]}
                   alt={weakness}
                 />
@@ -122,11 +157,7 @@ export function Pokedex() {
             ))}
           </div>
         </div>
-        {errorMessage && (
-          <div className="error-message">
-            {errorMessage}
-          </div>
-        )}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
       </div>
       <div className="panel right-panel">
         <div className="controls leds">
